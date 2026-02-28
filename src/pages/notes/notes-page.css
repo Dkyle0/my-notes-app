@@ -1,0 +1,41 @@
+.notes-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .notes-layout {
+    position: relative;
+  }
+
+  /* Sidebar занимает весь экран, лежит поверх */
+  .notes-layout .sidebar {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    min-width: 100% !important;
+    transform: translateX(0);
+    transition: transform 0.25s ease;
+    z-index: 2;
+  }
+
+  /* При показе заметки — сайдбар уходит влево */
+  .notes-layout--show-note .sidebar {
+    transform: translateX(-100%);
+  }
+
+  /* Workspace занимает весь экран, изначально справа */
+  .notes-layout .workspace {
+    position: absolute;
+    inset: 0;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    z-index: 1;
+  }
+
+  /* При показе заметки — workspace выезжает на экран */
+  .notes-layout--show-note .workspace {
+    transform: translateX(0);
+  }
+}

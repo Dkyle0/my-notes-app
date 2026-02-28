@@ -1,7 +1,9 @@
+import { ColorSchemeScript } from "@mantine/core";
+
 export const App = () => {
   return (
     <>
-      <h1>Hello world</h1>
+      <ColorSchemeScript />
     </>
   );
 };
