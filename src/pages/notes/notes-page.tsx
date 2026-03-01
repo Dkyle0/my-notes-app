@@ -25,7 +25,6 @@ export const Notes = () => {
     loadNotes();
   }, [loadNotes]);
 
-  // При сбросе активной заметки — возвращаемся к списку на мобиле
   useEffect(() => {
     if (activeId === null) setMobilePane("list");
   }, [activeId]);
@@ -54,31 +53,38 @@ export const Notes = () => {
     async (id: string) => {
       await db.notes.delete(id);
       const remaining = notes.filter((n) => n.id !== id);
-      setActiveId((prev) => (prev === id ? remaining[0]?.id ?? null : prev));
+      setActiveId((prev) => (prev === id ? (remaining[0]?.id ?? null) : prev));
       setDeleteTargetId(null);
       await loadNotes();
     },
-    [loadNotes, notes]
+    [loadNotes, notes],
   );
 
   const onUpdate = useCallback(
-    async (id: string, patch: Partial<Pick<Note, "title" | "content" | "updatedAt">>) => {
+    async (
+      id: string,
+      patch: Partial<Pick<Note, "title" | "content" | "updatedAt">>,
+    ) => {
       await db.notes.update(id, patch);
       await loadNotes();
     },
-    [loadNotes]
+    [loadNotes],
   );
 
   const onSignOut = useCallback(() => {
     auth?.signout(() => navigate("/login"));
   }, [auth, navigate]);
 
-  const activeNote = activeId ? notes.find((n) => n.id === activeId) ?? null : null;
+  const activeNote = activeId
+    ? (notes.find((n) => n.id === activeId) ?? null)
+    : null;
   const deleteTarget = notes.find((n) => n.id === deleteTargetId);
 
   return (
     <>
-      <div className={`notes-layout${mobilePane === "note" ? " notes-layout--show-note" : ""}`}>
+      <div
+        className={`notes-layout${mobilePane === "note" ? " notes-layout--show-note" : ""}`}
+      >
         <Sidebar
           notes={notes}
           activeId={activeId}
@@ -104,14 +110,19 @@ export const Notes = () => {
       >
         <Text size="sm" c="dimmed">
           Вы уверены, что хотите удалить «
-          <Text span fw={600} c="dark">{deleteTarget?.title || "Без названия"}</Text>
+          <Text span fw={600} c="dark">
+            {deleteTarget?.title || "Без названия"}
+          </Text>
           »? Это действие нельзя отменить.
         </Text>
         <Group gap="sm" justify="flex-end" mt="lg">
           <Button variant="default" onClick={() => setDeleteTargetId(null)}>
             Отмена
           </Button>
-          <Button color="red" onClick={() => deleteTargetId && onDelete(deleteTargetId)}>
+          <Button
+            color="red"
+            onClick={() => deleteTargetId && onDelete(deleteTargetId)}
+          >
             Удалить
           </Button>
         </Group>

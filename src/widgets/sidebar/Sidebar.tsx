@@ -1,9 +1,14 @@
-import { useState } from "react";
-import { ActionIcon, Text, TextInput, Tooltip } from "@mantine/core";
-import { IconPlus, IconLogout, IconSearch } from "@tabler/icons-react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { ActionIcon, Text, Tooltip } from "@mantine/core";
+import { IconPlus, IconLogout } from "@tabler/icons-react";
 import { useDebounce } from "../../shared/hooks";
+import { SearchBox } from "../searchbox/SearchBox";
 import type { Note } from "../../entities/note";
 import "./sidebar.css";
+
+const MIN_WIDTH = 200;
+const MAX_WIDTH = 480;
+const DEFAULT_WIDTH = 260;
 
 interface SidebarProps {
   notes: Note[];
@@ -50,22 +55,57 @@ function getPreview(content: string): string {
 
 export function Sidebar({ notes, activeId, onSelect, onCreate, onSignOut }: SidebarProps) {
   const [searchInput, setSearchInput] = useState("");
+  const [width, setWidth] = useState(DEFAULT_WIDTH);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragRef = useRef<{ startX: number; startWidth: number } | null>(null);
+
   const debouncedQuery = useDebounce(searchInput, 300);
   const filtered = filterNotes(notes, debouncedQuery);
 
+  const handleResizerMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      dragRef.current = { startX: e.clientX, startWidth: width };
+      setIsDragging(true);
+      document.body.style.cursor = "col-resize";
+      document.body.style.userSelect = "none";
+    },
+    [width]
+  );
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!dragRef.current) return;
+      const delta = e.clientX - dragRef.current.startX;
+      const next = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, dragRef.current.startWidth + delta));
+      setWidth(next);
+    };
+
+    const onMouseUp = () => {
+      setIsDragging(false);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+  }, [isDragging]);
+
   return (
-    <aside className="sidebar">
+    <aside className="sidebar" style={{ width }}>
+      <div
+        className={`sidebar-resizer${isDragging ? " sidebar-resizer--dragging" : ""}`}
+        onMouseDown={handleResizerMouseDown}
+      />
+
       <div className="sidebar-header">
-        <TextInput
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.currentTarget.value)}
-          placeholder="Поиск"
-          leftSection={<IconSearch size={14} />}
-          variant="filled"
-          size="sm"
-          radius="md"
-          styles={{ input: { background: "rgba(0,0,0,0.07)", border: "none" } }}
-        />
+        <SearchBox value={searchInput} onChange={setSearchInput} />
       </div>
 
       <div className="sidebar-list">

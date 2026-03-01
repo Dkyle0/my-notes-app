@@ -1,0 +1,119 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #020c02;
+  overflow: hidden;
+}
+
+/* Matrix rain canvas */
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* CRT scanlines */
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.12) 2px,
+    rgba(0, 0, 0, 0.12) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Vignette */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Content overlay */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 52px;
+  z-index: 3;
+  padding: 40px 32px;
+}
+
+/* Quote text */
+.quote {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: clamp(14px, 1.8vw, 18px);
+  color: #00e535;
+  text-align: center;
+  max-width: 540px;
+  line-height: 1.9;
+  text-shadow:
+    0 0 6px #00ff41,
+    0 0 22px rgba(0, 200, 60, 0.5);
+  min-height: 5.5em;
+  letter-spacing: 0.03em;
+  margin: 0;
+}
+
+/* Blinking block cursor */
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.05em;
+  background: #00e535;
+  margin-left: 3px;
+  vertical-align: text-bottom;
+  box-shadow: 0 0 8px #00ff41;
+  animation: blink 0.9s step-end infinite;
+}
+
+/* "Follow the rabbit" button */
+.button {
+  background: transparent;
+  border: 1px solid #00e535;
+  color: #00e535;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  padding: 13px 36px;
+  cursor: pointer;
+  letter-spacing: 0.14em;
+  text-shadow: 0 0 6px #00ff41;
+  box-shadow:
+    0 0 16px rgba(0, 255, 65, 0.2),
+    inset 0 0 16px rgba(0, 255, 65, 0.03);
+  transition: box-shadow 0.2s, background 0.2s;
+  animation: fadeIn 0.6s ease both;
+}
+
+.button:hover {
+  background: rgba(0, 255, 65, 0.07);
+  box-shadow:
+    0 0 36px rgba(0, 255, 65, 0.55),
+    inset 0 0 16px rgba(0, 255, 65, 0.07);
+}
+
+.button:active {
+  background: rgba(0, 255, 65, 0.14);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

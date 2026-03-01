@@ -1,14 +1,70 @@
 .container {
   width: 100%;
-  min-height: 60vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #fffef5;
 }
 
-.container_404 {
-  background-image: url("../../assets/404.webp");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+/* ── 404 block ─────────────────────────────────────────── */
+.wrapper404 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.code {
+  font-size: clamp(100px, 20vw, 180px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #1c1917;
+  user-select: none;
+  animation: float 3.6s ease-in-out infinite;
+}
+
+.code .accent {
+  color: #ffe066;
+}
+
+.shadow {
+  width: 130px;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.13);
+  border-radius: 50%;
+  filter: blur(5px);
+  animation: shadowPulse 3.6s ease-in-out infinite;
+}
+
+.content404 {
+  margin-top: 44px;
+  animation: fadeUp 0.65s ease 0.25s both;
+}
+
+/* ── Generic error block ───────────────────────────────── */
+.contentGeneric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  animation: fadeUp 0.5s ease both;
+}
+
+/* ── Animations ────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-20px); }
+}
+
+@keyframes shadowPulse {
+  0%, 100% { transform: scaleX(1);    opacity: 1; }
+  50%       { transform: scaleX(0.6); opacity: 0.35; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

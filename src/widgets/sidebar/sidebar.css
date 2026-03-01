@@ -1,6 +1,5 @@
 .sidebar {
-  width: 260px;
-  min-width: 260px;
+  position: relative;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -8,6 +7,30 @@
   border-right: 1px solid #e2dfd9;
   overflow: hidden;
   flex-shrink: 0;
+}
+
+/* ── Resize handle ─────────────────────────────────────── */
+.sidebar-resizer {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  width: 5px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 10;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+
+.sidebar-resizer:hover,
+.sidebar-resizer--dragging {
+  background: rgba(255, 224, 102, 0.55);
+}
+
+@media (max-width: 640px) {
+  .sidebar-resizer {
+    display: none;
+  }
 }
 
 .sidebar-header {

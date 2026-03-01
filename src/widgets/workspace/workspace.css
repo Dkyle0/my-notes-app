@@ -60,6 +60,11 @@
   padding: 28px 40px;
 }
 
+.workspace-content--matrix {
+  padding: 0;
+  overflow: hidden;
+}
+
 .workspace-content::-webkit-scrollbar {
   width: 6px;
 }
